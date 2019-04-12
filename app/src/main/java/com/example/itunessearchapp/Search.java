@@ -4,6 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Search {
 
+    Search(String searchTerm){
+
+    }
+
     private String artistName;
 
     @SerializedName("trackName")
