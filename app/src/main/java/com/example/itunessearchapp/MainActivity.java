@@ -2,11 +2,15 @@ package com.example.itunessearchapp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -20,13 +24,18 @@ public class MainActivity extends AppCompatActivity {
     ITunesSearchApi iTunesSearchApi;
     TextView resultText;
 
+    // below section is for Recycler View implementation
+    private static final String TAG = "MainActivity";
+    private ArrayList<String> mImageUrls = new ArrayList<>();
+    private ArrayList<String> mImageDesrcs = new ArrayList<>();
+    private ArrayList<String> movieNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: Started.");
         init();
-
 
     }
 
@@ -34,16 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText searchInput = findViewById(R.id.search_input);
         Button searchButton = findViewById(R.id.search_button);
-        final TextView requestText = findViewById(R.id.request_text_view);
-        resultText = findViewById(R.id.response_text_view);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String capturedMovie = searchInput.getText().toString();
-                new Search(capturedMovie);
-                String resultToDisplay = "You searched for: " + capturedMovie;
-                requestText.setText(resultToDisplay);
 
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("https://itunes.apple.com/")
@@ -52,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
                 iTunesSearchApi = retrofit.create(ITunesSearchApi.class);
                 retrieveSearchResults(capturedMovie);
+                initRecyclerView();
+
             }
         });
 
@@ -71,24 +77,33 @@ public class MainActivity extends AppCompatActivity {
 
                 List<Search> searchResults = response.body().searches();
 
-                StringBuilder output = new StringBuilder();
                 for(Search result : searchResults){
-                    output.append("Artist Name " + result.getArtistName() + "\n");
-                    output.append("Movie name " + result.getMovieName() + "\n");
-                    output.append("Genre " + result.getPrimaryGenreName() + "\n");
-                    output.append("Advisory rating " + result.getContentAdvisoryRating() + "\n");
-                    output.append("Rental price " + result.getTrackRentalPrice() + "\n");
-                    output.append("Buy price " + result.getTrackPrice() + "\n");
-                    output.append("\n\n");
-                    resultText.setText(output.toString());
+                    initLists(mImageUrls, result.getArtworkUrl60());
+                    initLists(mImageDesrcs, result.getLongDescription());
+                    initLists(movieNames, result.getMovieName());
                 }
             }
 
             @Override
             public void onFailure(Call<SearchWrapper> call, Throwable t) {
-                resultText.setText(t.getMessage());
+//                resultText.setText(t.getMessage());
             }
         });
+    }
+
+    // below section is for Recycler View implementation
+    // this is not needed to populate arrayList manually since I will do that once in get a response
+    private void initLists(List<String> list, String item) {
+        Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
+        list.add(item);
+    }
+
+    private void initRecyclerView() {
+        Log.d(TAG, "initRecyclerView: init recyclerView");
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(mImageDesrcs, mImageUrls, movieNames, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
