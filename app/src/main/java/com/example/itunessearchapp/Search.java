@@ -15,6 +15,8 @@ public class Search {
 
     private String artworkUrl60;
     private double trackPrice;
+
+    @SerializedName("trackRentalPrice")
     private double trackRentalPrice;
     private String primaryGenreName;
     private String contentAdvisoryRating;

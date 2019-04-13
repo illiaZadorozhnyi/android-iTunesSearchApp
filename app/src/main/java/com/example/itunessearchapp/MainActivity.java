@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     ITunesSearchApi iTunesSearchApi;
-    final TextView resultText = findViewById(R.id.response_text_view);
+    TextView resultText;
 
 
     @Override
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText searchInput = findViewById(R.id.search_input);
         Button searchButton = findViewById(R.id.search_button);
         final TextView requestText = findViewById(R.id.request_text_view);
+        resultText = findViewById(R.id.response_text_view);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,17 +59,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void retrieveSearchResults(String searchTerm) {
 
-        Call<List<Search>> call = iTunesSearchApi.getSearchResult(searchTerm, "us", "movie");
+        Call<SearchWrapper> call = iTunesSearchApi.getSearchResult(searchTerm, "us", "movie");
 
-        call.enqueue(new Callback<List<Search>>() {
+        call.enqueue(new Callback<SearchWrapper>() {
             @Override
-            public void onResponse(Call<List<Search>> call, Response<List<Search>> response) {
+            public void onResponse(Call<SearchWrapper> call, Response<SearchWrapper> response) {
                 if(!response.isSuccessful()){
                     resultText.setText("Response code: " + response.code() + "\n");
                     return;
                 }
 
-                List<Search> searchResults = response.body();
+                List<Search> searchResults = response.body().searches();
 
                 StringBuilder output = new StringBuilder();
                 for(Search result : searchResults){
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Search>> call, Throwable t) {
+            public void onFailure(Call<SearchWrapper> call, Throwable t) {
                 resultText.setText(t.getMessage());
             }
         });

@@ -9,7 +9,7 @@ import retrofit2.http.Query;
 public interface ITunesSearchApi {
 
     @GET("search")
-    Call<List<Search>> getSearchResult(
+    Call<SearchWrapper> getSearchResult(
             @Query("term") String movieName,
             @Query("country") String country,
             @Query("media") String mediaType
