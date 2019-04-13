@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     output.append("Rental price " + result.getTrackRentalPrice() + "\n");
                     output.append("Buy price " + result.getTrackPrice() + "\n");
                     output.append("\n\n");
-                    resultText.append(output.toString());
+                    resultText.setText(output.toString());
                 }
             }
 
