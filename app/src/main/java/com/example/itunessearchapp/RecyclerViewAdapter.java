@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -20,9 +19,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private List<String> mImages = new ArrayList<>();
-    private List<String> mImageDescr = new ArrayList<>();
-    private List<String> movieNames = new ArrayList<>();
+    private List<String> mImages;
+    private List<String> mImageDescr;
+    private List<String> movieNames;
     private Context context;
 
     public RecyclerViewAdapter(List<String> mImageDescr, List<String> mImages, List<String> movieNames, Context context) {

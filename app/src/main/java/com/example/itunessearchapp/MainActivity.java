@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void retrieveSearchResults(String searchTerm) {
@@ -78,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 List<Search> searchResults = response.body().searches();
 
                 for(Search result : searchResults){
+//                    initLists(mImageUrls, result.getArtworkUrl60());
                     initLists(mImageUrls, result.getArtworkUrl60());
                     initLists(mImageDesrcs, result.getLongDescription());
                     initLists(movieNames, result.getMovieName());
@@ -91,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // below section is for Recycler View implementation
-    // this is not needed to populate arrayList manually since I will do that once in get a response
     private void initLists(List<String> list, String item) {
         Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
         list.add(item);
@@ -105,6 +103,4 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
-
 }
