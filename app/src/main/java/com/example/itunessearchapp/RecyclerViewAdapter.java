@@ -6,13 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import java.util.ArrayList;
 
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -20,16 +21,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private List<String> mImages;
-    private List<String> mImageDescr;
-    private List<String> movieNames;
     private Context context;
+    private ArrayList<Movie> list;
 
-    public RecyclerViewAdapter(List<String> mImageDescr, List<String> mImages, List<String> movieNames, Context context) {
-        this.mImages = mImages;
+    public RecyclerViewAdapter(Context context) {
         this.context = context;
-        this.mImageDescr = mImageDescr;
-        this.movieNames = movieNames;
+        this.list = new ArrayList<>();
     }
 
     // onCreateViewHolder stays without much change for any recycleViewAdaptor, all it needs is a layout
@@ -45,36 +42,39 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holderPassed, final int position) {
         Log.d(TAG, "onBindViewHolder: called");
 
+        final Movie movieItem = list.get(position);
         final ViewHolder holder = holderPassed;
+
 
         Glide.with(context)
                 .asBitmap()
-                .load(mImages.get(position))
+                .placeholder(R.drawable.ic_autorenew)
+                .load(movieItem.getImageURL())
                 .into(holder.image);
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: clicked on " + mImageDescr.get(position));
+                Log.d(TAG, "onClick: clicked on " + movieItem);
 
-// TODO need to look for better implementations for Toast
-//                Toast.makeText(context, mImageDescr.get(position), Toast.LENGTH_SHORT).show();
-
-                holder.imageDescr.setText(mImageDescr.get(position));
+                holder.imageDescr.setText(movieItem.getImageDesc());
                 holder.namesView.setText("");
 
             }
         });
-        holder.namesView.setText(movieNames.get(position));
+        holder.namesView.setText(movieItem.getTitle());
     }
 
-    // this tells the adaptor how many items are in the list, if it is left at 0, blank screen will be displayed
     @Override
     public int getItemCount() {
-        return mImages.size();
+        if (list == null) {
+            return 0;
+        }
+        return list.size();
     }
 
-    public void refresh(){
+    public void setData(ArrayList<Movie> list) {
+        this.list = list;
         notifyDataSetChanged();
     }
 
@@ -82,9 +82,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         CircleImageView image;
         TextView imageDescr;
-        RelativeLayout parentLayout;
+        LinearLayout parentLayout;
         TextView namesView;
-        ImageButton heartImage;
+        ImageView heartImage;
+        boolean isFavorited;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -93,6 +94,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             parentLayout = itemView.findViewById(R.id.parent_layout);
             namesView = itemView.findViewById(R.id.movie_name);
             heartImage = itemView.findViewById(R.id.like_image_border);
+            toggleFavorite();
         }
+
+        private void toggleFavorite() {
+            heartImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isFavorited) {
+                        heartImage.setBackgroundResource(R.drawable.ic_favorite_border);
+                        isFavorited = false;
+                    } else {
+                        heartImage.setBackgroundResource(R.drawable.ic_favorite_full);
+                        isFavorited = true;
+                        displayToast("Added to favorites!",v);
+                    }
+                }
+            });
+        }
+
+        private void displayToast(String text, View v) {
+            Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

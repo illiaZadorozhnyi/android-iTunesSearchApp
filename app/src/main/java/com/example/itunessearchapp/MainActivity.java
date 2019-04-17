@@ -8,9 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,40 +23,26 @@ public class MainActivity extends AppCompatActivity {
 
     ITunesSearchApi iTunesSearchApi;
     TextView resultText;
-    ImageButton favoriteImage = findViewById(R.id.like_image_border);
 
-    // below section is for Recycler View implementation
     private static final String TAG = "MainActivity";
-    private ArrayList<String> mImageUrls = new ArrayList<>();
-    private ArrayList<String> mImageDesrcs = new ArrayList<>();
-    private ArrayList<String> movieNames = new ArrayList<>();
 
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter;
-
+    private ArrayList<Movie> mMovieList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        favoriteImage = findViewById(R.id.like_image_border);
         Log.d(TAG, "onCreate: Started.");
         init();
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://itunes.apple.com/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://itunes.apple.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-                iTunesSearchApi = retrofit.create(ITunesSearchApi.class);
-                initRecyclerView();
-
-                favoriteImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        favoriteImage.setBackgroundResource(R.drawable.ic_favorite_full);
-                        displayToast(getString(R.string.saved_to_favorites_message));
-                    }
-                });
+        iTunesSearchApi = retrofit.create(ITunesSearchApi.class);
+        initRecyclerView();
 
     }
 
@@ -83,54 +67,36 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<SearchWrapper>() {
             @Override
             public void onResponse(Call<SearchWrapper> call, Response<SearchWrapper> response) {
-                if(!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     resultText.setText("Response code: " + response.code() + "\n");
                     return;
                 }
 
                 List<Search> searchResults = response.body().searches();
+                mMovieList = new ArrayList<>();
 
-                for(Search result : searchResults){
-                    initLists(mImageUrls, result.getArtworkUrl60());
-                    initLists(mImageDesrcs, result.getLongDescription());
-                    initLists(movieNames, result.getMovieName());
-                }
-                adapter.refresh();
+                for (Search result : searchResults) {
+                    Movie m = new Movie();
+                m.setImageDesc(result.getLongDescription());
+                m.setImageURL(result.getArtworkUrl60());
+                m.setTitle(result.getMovieName());
+                    mMovieList.add(m);
             }
+            adapter.setData(mMovieList);
+        }
 
-            @Override
-            public void onFailure(Call<SearchWrapper> call, Throwable t) {
-                resultText.setText(t.getMessage());
-            }
-        });
-    }
-
-    private void initLists(List<String> list, String item) {
-        Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
-        list.add(item);
-    }
-
-    public void displayToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-    }
+        @Override
+        public void onFailure (Call < SearchWrapper > call, Throwable t){
+            resultText.setText(t.getMessage());
+        }
+    });
+}
 
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView");
         recyclerView = findViewById(R.id.recycler_view);
-        adapter = new RecyclerViewAdapter(mImageDesrcs, mImageUrls, movieNames, this);
+        adapter = new RecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-// TODO can not properly implement notifyDataSetChanged() for recyclerView, what am I missing ?
-// TODO WHY is below causing APP to crash, where to put it and how to troubleshoot similar problems
-
-//        final ImageButton favoriteImage = findViewById(R.id.like_image_border);
-//        favoriteImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                favoriteImage.setBackgroundResource(R.drawable.ic_favorite_full);
-//                displayToast(getString(R.string.saved_to_favorites_message));
-//            }
-//        });
     }
 }
