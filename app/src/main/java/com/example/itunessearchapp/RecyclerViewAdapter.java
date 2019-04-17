@@ -91,6 +91,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return mImages.size();
     }
 
+
+    public void refresh(){
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;

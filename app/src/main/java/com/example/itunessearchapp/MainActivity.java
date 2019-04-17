@@ -30,12 +30,23 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mImageDesrcs = new ArrayList<>();
     private ArrayList<String> movieNames = new ArrayList<>();
 
+    RecyclerView recyclerView;
+    RecyclerViewAdapter adapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: Started.");
         init();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://itunes.apple.com/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                iTunesSearchApi = retrofit.create(ITunesSearchApi.class);
+                initRecyclerView();
 
     }
 
@@ -49,14 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String capturedMovie = searchInput.getText().toString();
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://itunes.apple.com/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                iTunesSearchApi = retrofit.create(ITunesSearchApi.class);
                 retrieveSearchResults(capturedMovie);
-                initRecyclerView();
 
             }
         });
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     initLists(mImageDesrcs, result.getLongDescription());
                     initLists(movieNames, result.getMovieName());
                 }
+                adapter.refresh();
             }
 
             @Override
@@ -98,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView");
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(mImageDesrcs, mImageUrls, movieNames, this);
+        recyclerView = findViewById(R.id.recycler_view);
+        adapter = new RecyclerViewAdapter(mImageDesrcs, mImageUrls, movieNames, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
