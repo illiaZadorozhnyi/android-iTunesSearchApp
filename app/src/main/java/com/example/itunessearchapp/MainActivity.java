@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
         list.add(item);
     }
 
+    public void displayToast(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView");
         recyclerView = findViewById(R.id.recycler_view);
@@ -112,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 //            @Override
 //            public void onClick(View view) {
 //                favoriteImage.setBackgroundResource(R.drawable.ic_favorite_full);
+//                displayToast(getString(R.string.saved_to_favorites_message));
 //            }
 //        });
     }
