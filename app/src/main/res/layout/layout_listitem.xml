@@ -30,4 +30,14 @@
         android:textColor="#000"
         android:textSize="18dp"/>
 
+    <ImageButton
+        android:id="@+id/like_image_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="41dp"
+        android:src="@drawable/ic_favorite_border"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
+
 </RelativeLayout>

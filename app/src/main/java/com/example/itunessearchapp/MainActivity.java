@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String capturedMovie = searchInput.getText().toString();
-
                 retrieveSearchResults(capturedMovie);
 
             }
@@ -67,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void retrieveSearchResults(String searchTerm) {
-
         Call<SearchWrapper> call = iTunesSearchApi.getSearchResult(searchTerm, "us", "movie");
 
         call.enqueue(new Callback<SearchWrapper>() {
@@ -81,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                 List<Search> searchResults = response.body().searches();
 
                 for(Search result : searchResults){
-//                    initLists(mImageUrls, result.getArtworkUrl60());
                     initLists(mImageUrls, result.getArtworkUrl60());
                     initLists(mImageDesrcs, result.getLongDescription());
                     initLists(movieNames, result.getMovieName());
@@ -91,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SearchWrapper> call, Throwable t) {
-//                resultText.setText(t.getMessage());
+                resultText.setText(t.getMessage());
             }
         });
     }
@@ -107,5 +103,16 @@ public class MainActivity extends AppCompatActivity {
         adapter = new RecyclerViewAdapter(mImageDesrcs, mImageUrls, movieNames, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+// TODO can not properly implement notifyDataSetChanged() for recyclerView, what am I missing ?
+// TODO WHY is below causing APP to crash, where to put it and how to troubleshoot similar problems
+
+//        final ImageButton favoriteImage = findViewById(R.id.like_image_border);
+//        favoriteImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                favoriteImage.setBackgroundResource(R.drawable.ic_favorite_full);
+//            }
+//        });
     }
 }

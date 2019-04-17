@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -51,7 +52,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .load(mImages.get(position))
                 .into(holder.image);
 
-//        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,29 +60,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 // TODO need to look for better implementations for Toast
 //                Toast.makeText(context, mImageDescr.get(position), Toast.LENGTH_SHORT).show();
 
-//  TODO need to understand how to apply this below toggle-like behavior
-//                if (view.getVisibility() == View.VISIBLE) {
-//                    view.setVisibility(View.GONE);
-//                } else {
-//                    view.setVisibility(View.VISIBLE);
-//                }
-
                 holder.imageDescr.setText(mImageDescr.get(position));
                 holder.namesView.setText("");
 
             }
         });
         holder.namesView.setText(movieNames.get(position));
-//        holder.movieNames.setText(mImageDescr.get(position));
-
-//       holder.movieNames.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick for minDescr : clicked on " + movieNames.get(position));
-////                movieNames.setText(movieNames.get(position));
-//            }
-//        });
     }
 
     // this tells the adaptor how many items are in the list, if it is left at 0, blank screen will be displayed
@@ -90,7 +73,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getItemCount() {
         return mImages.size();
     }
-
 
     public void refresh(){
         notifyDataSetChanged();
@@ -102,6 +84,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView imageDescr;
         RelativeLayout parentLayout;
         TextView namesView;
+        ImageButton heartImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -109,6 +92,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageDescr = itemView.findViewById(R.id.image_description);
             parentLayout = itemView.findViewById(R.id.parent_layout);
             namesView = itemView.findViewById(R.id.movie_name);
+            heartImage = itemView.findViewById(R.id.like_image_border);
         }
     }
 }
