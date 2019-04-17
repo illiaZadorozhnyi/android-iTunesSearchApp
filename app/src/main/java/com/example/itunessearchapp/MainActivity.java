@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     ITunesSearchApi iTunesSearchApi;
     TextView resultText;
+    ImageButton favoriteImage = findViewById(R.id.like_image_border);
 
     // below section is for Recycler View implementation
     private static final String TAG = "MainActivity";
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        favoriteImage = findViewById(R.id.like_image_border);
         Log.d(TAG, "onCreate: Started.");
         init();
                 Retrofit retrofit = new Retrofit.Builder()
@@ -48,6 +51,14 @@ public class MainActivity extends AppCompatActivity {
 
                 iTunesSearchApi = retrofit.create(ITunesSearchApi.class);
                 initRecyclerView();
+
+                favoriteImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        favoriteImage.setBackgroundResource(R.drawable.ic_favorite_full);
+                        displayToast(getString(R.string.saved_to_favorites_message));
+                    }
+                });
 
     }
 
