@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/card_image1"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+
+        <TextView
+            android:id="@+id/card_title1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/card_image1"
+            android:text="Testing" />
+
+        <TextView
+            android:id="@+id/card_description1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="6"
+            android:minLines="1"
+            android:layout_below="@+id/card_title1"
+            android:layout_toRightOf="@id/card_image1"
+            android:text="Desdl;gjhaslgkjghdsfkljhgkjlfdhgdkghjdhgdfskghfdlkgdfhgfdlhlkghlhglfkdjghdflkgjdhgjhgh" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_description1"
+            android:layout_toRightOf="@id/card_image1">
+
+            <Button
+                android:id="@+id/buy_button1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="15dp"
+                android:text="BUY:$"/>
+
+            <Button
+                android:id="@+id/rent_button1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="15dp"
+                android:text="RENT:$"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 
@@ -52,17 +53,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .load(movieItem.getImageURL())
                 .into(holder.image);
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: clicked on " + movieItem);
-
-                holder.imageDescr.setText(movieItem.getImageDesc());
-                holder.namesView.setText("");
-
-            }
-        });
+//        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d(TAG, "onClick: clicked on " + movieItem);
+//
+//                if (holder.isExpanded == false) {
+//                    holder.isExpanded = true;
+//                } else {
+//                    holder.
+//                    holder.isExpanded = false;
+//                }
+//
+//            }
+//        });
+        holder.imageDescr.setText(movieItem.getImageDesc());
         holder.namesView.setText(movieItem.getTitle());
+
     }
 
     @Override
@@ -86,6 +93,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView namesView;
         ImageView heartImage;
         boolean isFavorited;
+        boolean isExpanded;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -94,7 +102,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             parentLayout = itemView.findViewById(R.id.parent_layout);
             namesView = itemView.findViewById(R.id.movie_name);
             heartImage = itemView.findViewById(R.id.like_image_border);
+            imageDescr.setVisibility(View.GONE);
             toggleFavorite();
+            toggleExpanded();
         }
 
         private void toggleFavorite() {
@@ -107,7 +117,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     } else {
                         heartImage.setBackgroundResource(R.drawable.ic_favorite_full);
                         isFavorited = true;
-                        displayToast("Added to favorites!",v);
+                        displayToast("Added to favorites!", v);
+                    }
+                }
+            });
+        }
+
+        // TODO trying to externalize expanding a description into a separate method from inside onBindViewHolder
+        private void toggleExpanded() {
+            parentLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (isExpanded) {
+                        imageDescr.setVisibility(View.GONE);
+                        isExpanded = false;
+                    } else {
+                        imageDescr.setVisibility(View.VISIBLE);
+                        isExpanded = true;
                     }
                 }
             });

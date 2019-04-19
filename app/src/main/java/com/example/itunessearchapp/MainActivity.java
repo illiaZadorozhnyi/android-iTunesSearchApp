@@ -1,6 +1,9 @@
 package com.example.itunessearchapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter;
     private ArrayList<Movie> mMovieList;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText searchInput = findViewById(R.id.search_input);
         Button searchButton = findViewById(R.id.search_button);
+        FloatingActionButton favoritesButton = findViewById(R.id.favorites_list_button);
+        context = this;
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +65,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        favoritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, FavoritesActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
     private void retrieveSearchResults(String searchTerm) {
         Call<SearchWrapper> call = iTunesSearchApi.getSearchResult(searchTerm, "us", "movie");
@@ -67,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<SearchWrapper>() {
             @Override
             public void onResponse(Call<SearchWrapper> call, Response<SearchWrapper> response) {
+                View button = findViewById(R.id.favorites_list_button);
+
                 if (!response.isSuccessful()) {
                     resultText.setText("Response code: " + response.code() + "\n");
                     return;
@@ -77,20 +94,21 @@ public class MainActivity extends AppCompatActivity {
 
                 for (Search result : searchResults) {
                     Movie m = new Movie();
-                m.setImageDesc(result.getLongDescription());
-                m.setImageURL(result.getArtworkUrl60());
-                m.setTitle(result.getMovieName());
+                    m.setImageDesc(result.getLongDescription());
+                    m.setImageURL(result.getArtworkUrl60());
+                    m.setTitle(result.getMovieName());
                     mMovieList.add(m);
+                }
+                adapter.setData(mMovieList);
+                button.setVisibility(View.VISIBLE);
             }
-            adapter.setData(mMovieList);
-        }
 
-        @Override
-        public void onFailure (Call < SearchWrapper > call, Throwable t){
-            resultText.setText(t.getMessage());
-        }
-    });
-}
+            @Override
+            public void onFailure(Call<SearchWrapper> call, Throwable t) {
+                resultText.setText(t.getMessage());
+            }
+        });
+    }
 
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView");

@@ -1,6 +1,10 @@
 package com.example.itunessearchapp;
 
-public class Movie {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class Movie implements Serializable {
 
     String title;
     String imageDesc;
