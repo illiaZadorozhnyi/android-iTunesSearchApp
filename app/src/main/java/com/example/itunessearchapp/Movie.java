@@ -9,6 +9,16 @@ public class Movie implements Serializable {
     String title;
     String imageDesc;
     String imageURL;
+    boolean isFavorited;
+
+    public boolean isFavorited() {
+        return isFavorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        isFavorited = favorited;
+    }
+
 
     public Movie() {
     }

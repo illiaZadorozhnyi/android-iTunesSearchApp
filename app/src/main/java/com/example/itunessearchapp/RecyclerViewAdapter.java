@@ -53,20 +53,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .load(movieItem.getImageURL())
                 .into(holder.image);
 
-//        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.d(TAG, "onClick: clicked on " + movieItem);
-//
-//                if (holder.isExpanded == false) {
-//                    holder.isExpanded = true;
-//                } else {
-//                    holder.
-//                    holder.isExpanded = false;
-//                }
-//
-//            }
-//        });
         holder.imageDescr.setText(movieItem.getImageDesc());
         holder.namesView.setText(movieItem.getTitle());
 
@@ -123,7 +109,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             });
         }
 
-        // TODO trying to externalize expanding a description into a separate method from inside onBindViewHolder
         private void toggleExpanded() {
             parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

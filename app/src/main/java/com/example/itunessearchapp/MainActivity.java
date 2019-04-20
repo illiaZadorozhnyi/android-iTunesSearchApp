@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerViewAdapter adapter;
     private ArrayList<Movie> mMovieList;
     private Context context;
+    private FloatingActionButton favoritesButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText searchInput = findViewById(R.id.search_input);
         Button searchButton = findViewById(R.id.search_button);
-        FloatingActionButton favoritesButton = findViewById(R.id.favorites_list_button);
+        favoritesButton = findViewById(R.id.favorites_list_button);
         context = this;
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<SearchWrapper>() {
             @Override
             public void onResponse(Call<SearchWrapper> call, Response<SearchWrapper> response) {
-                View button = findViewById(R.id.favorites_list_button);
+                View FavListbutton = findViewById(R.id.favorites_list_button);
 
                 if (!response.isSuccessful()) {
                     resultText.setText("Response code: " + response.code() + "\n");
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     mMovieList.add(m);
                 }
                 adapter.setData(mMovieList);
-                button.setVisibility(View.VISIBLE);
+                FavListbutton.setVisibility(View.VISIBLE);
             }
 
             @Override
