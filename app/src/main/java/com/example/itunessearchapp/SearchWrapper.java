@@ -10,9 +10,9 @@ public class SearchWrapper {
 
     @SerializedName("results")
     @Expose
-    private List<Search> searches = null;
+    private List<Movie> searches = null;
 
-    public List<Search> searches() {
+    public List<Movie> searches() {
         return searches;
     }
 }

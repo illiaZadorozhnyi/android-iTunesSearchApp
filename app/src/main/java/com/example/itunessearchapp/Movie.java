@@ -6,8 +6,11 @@ import java.io.Serializable;
 
 public class Movie implements Serializable {
 
+    @SerializedName("trackName")
     String title;
+    @SerializedName("longDescription")
     String imageDesc;
+    @SerializedName("artworkUrl60")
     String imageURL;
     boolean isFavorited;
 
@@ -21,6 +24,13 @@ public class Movie implements Serializable {
 
 
     public Movie() {
+    }
+
+    public Movie(String title, String imageDesc, String imageURL, boolean isFavorited) {
+        this.title = title;
+        this.imageDesc = imageDesc;
+        this.imageURL = imageURL;
+        this.isFavorited = isFavorited;
     }
 
     public String getTitle() {

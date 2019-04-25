@@ -55,6 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.imageDescr.setText(movieItem.getImageDesc());
         holder.namesView.setText(movieItem.getTitle());
+        holder.isFavorited = movieItem.isFavorited();
 
     }
 
@@ -89,11 +90,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             namesView = itemView.findViewById(R.id.movie_name);
             heartImage = itemView.findViewById(R.id.like_image_border);
             imageDescr.setVisibility(View.GONE);
-            toggleFavorite();
+            toggleFavorite(itemView);
             toggleExpanded();
         }
 
-        private void toggleFavorite() {
+        private void toggleFavorite(View v) {
             heartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

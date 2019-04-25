@@ -90,14 +90,15 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                List<Search> searchResults = response.body().searches();
+//                List<Search> searchResults = response.body().searches();
+                List<Movie> searchResults = response.body().searches();
                 mMovieList = new ArrayList<>();
 
-                for (Search result : searchResults) {
+                for (Movie result : searchResults) {
                     Movie m = new Movie();
-                    m.setImageDesc(result.getLongDescription());
-                    m.setImageURL(result.getArtworkUrl60());
-                    m.setTitle(result.getMovieName());
+                    m.setImageDesc(result.getImageDesc());
+                    m.setImageURL(result.getImageURL());
+                    m.setTitle(result.getTitle());
                     mMovieList.add(m);
                 }
                 adapter.setData(mMovieList);
